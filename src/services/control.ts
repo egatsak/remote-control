@@ -3,8 +3,8 @@ import { up, down, left, right, mouse } from "@nut-tree/nut-js";
 
 import circle from "./figures/circle";
 import rectangle from "./figures/rectangle";
-import square from "./figures/square";
 import getPosition from "./mouse-position";
+import prntscrn from "./print-screen";
 
 const Directions = {
   right,
@@ -19,38 +19,40 @@ const Figures = {
   square: rectangle
 };
 
-export const controller = async (ws: WebSocket, ...args: any) => {
+export const controller = async (...args: any) => {
   const [command, width, height] = args;
   const action = command.split("_")[1];
+  let message;
 
   switch (true) {
     case command === "mouse_position": {
       const { x, y } = await getPosition();
-      const message = `mouse_position ${x},${y}`;
-      ws.send(message);
+      message = `mouse_position ${x},${y}`;
       break;
     }
 
     case command === "prnt_scrn": {
-      console.log("prtsc");
+      message = await prntscrn();
       break;
     }
 
     case command.startsWith("mouse"): {
       const direction = Directions[action as keyof typeof Directions];
       await mouse.move(direction(width!));
-      ws.send(command);
-      return;
+      message = command;
+      break;
     }
 
     case command.startsWith("draw"): {
       const figure = Figures[action as keyof typeof Figures];
       await figure(width, height);
-      ws.send(command);
-      return;
+      message = command;
+      break;
     }
 
     default:
-      console.log("Unknown command!");
+      message = "Unknown command: " + command;
   }
+
+  return message;
 };

@@ -12,9 +12,9 @@ wsServer.on("connection", (ws) => {
   console.log("WS Server connected!");
 
   ws.on("message", async (data) => {
-    console.log(data.toString());
     const parsed = parseData(data);
-    await controller(ws, ...parsed);
+    const message = await controller(...parsed);
+    ws.send(message);
   });
 });
 
