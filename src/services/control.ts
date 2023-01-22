@@ -4,6 +4,7 @@ import { up, down, left, right, mouse } from "@nut-tree/nut-js";
 import circle from "./figures/circle";
 import rectangle from "./figures/rectangle";
 import square from "./figures/square";
+import getPosition from "./mouse-position";
 
 const Directions = {
   right,
@@ -15,7 +16,7 @@ const Directions = {
 const Figures = {
   circle,
   rectangle,
-  square
+  square: rectangle
 };
 
 export const controller = async (ws: WebSocket, ...args: any) => {
@@ -24,24 +25,31 @@ export const controller = async (ws: WebSocket, ...args: any) => {
 
   switch (true) {
     case command === "mouse_position": {
-      console.log(action);
-      return;
+      const { x, y } = await getPosition();
+      const message = `mouse_position ${x},${y}`;
+      ws.send(message);
+      break;
     }
+
     case command === "prnt_scrn": {
       console.log("prtsc");
-      return;
+      break;
     }
+
     case command.startsWith("mouse"): {
       const direction = Directions[action as keyof typeof Directions];
       await mouse.move(direction(width!));
-      console.log("moved");
+      ws.send(command);
       return;
     }
+
     case command.startsWith("draw"): {
       const figure = Figures[action as keyof typeof Figures];
       await figure(width, height);
+      ws.send(command);
       return;
     }
+
     default:
       console.log("Unknown command!");
   }
