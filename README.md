@@ -1,6 +1,6 @@
 # REMOTE CONTROL
 
-## WOW! Websocket server intercepts your mouse and draws a circle!
+## WOW! Websocket server intercepts your mouse and draws a circle (and more)!
 
 Uses static http server at port 8181. By default WebSocket client tries to connect to the 8080 port.
 
@@ -10,13 +10,17 @@ Uses static http server at port 8181. By default WebSocket client tries to conne
 - `cd remote-control`
 - `npm install`
 - `npm run start`
-- App served @ `http://localhost:8181` with nodemon
+- App served @ `http://localhost:8181` without nodemon
 
 or
 
 - `npm run start:dev`
-- App served @ `http://localhost:8181` without nodemon
+- App served @ `http://localhost:8181` with nodemon
 
 ---
 
-**Note**: replace `npm` with `yarn` in `package.json` if you use yarn.
+## References
+
+[RS School](https://rs.school/)
+
+[nut.js](https://nutjs.dev/)
