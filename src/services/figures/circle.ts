@@ -8,7 +8,7 @@ export default async (width: number) => {
   const center = await mouse.getPosition();
   await mouse.pressButton(Button.LEFT);
 
-  // x = r*cos t ; y = r*sin t ; 0 ≤ t < 2π - parametric circle equation
+  // x = r*cos t ; y = r*sin t ; 0 ≤ t < 2π - circle parametric equation
   // we can adjust iterations number to approach to the perfect circle
 
   for (let ang = 0; ang < ITERATIONS; ang++) {
