@@ -25,6 +25,25 @@ wsServer.on("connection", (ws) => {
   });
 });
 
-console.log(`Start static http server on the ${HTTP_PORT} port!`);
+httpServer.on("connection", (socket) => {
+  socket.unref();
+});
 
-httpServer.listen(HTTP_PORT);
+process.on("SIGINT", () => {
+  wsServer.close();
+  httpServer.close();
+});
+
+const start = async () => {
+  try {
+    httpServer.listen(HTTP_PORT, () => {
+      console.log(
+        `Start static http server on the ${HTTP_PORT} port!`
+      );
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
